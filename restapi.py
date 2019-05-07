@@ -121,6 +121,17 @@ class SmartPlugBase(LoggingBase):
         if result["code"] != 200:
             self.log.error("on/off fail {}".format(result))
 
+    def get_device_info(self, device="all"):
+        data = {
+            "protocol": 3,
+            "dev": device
+        }
+
+        result = self._post_api("user/500", data)
+        self.log.debug(result)
+
+        return result["data"]["dev"]
+
 
 def load_config(filename="config.json"):
     with open(filename, "r") as fp:
@@ -133,6 +144,9 @@ def main():
                          id=config["id"],
                          pwd=config["password"])
 
-    plug.onoff("SWW1230070002573", 1)
+    # for on[1] off[0]
+    # plug.onoff("SWW1230070002573", 0)
+
+    print(plug.get_device_info())
 
 main()
